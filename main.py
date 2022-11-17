@@ -1,13 +1,14 @@
 from sqlalchemy.orm import sessionmaker
 from connect_to_db import connect_to_db, delete_table
 from input_data import add_data
+from query_row import query_row
 from User import User
 from env import DB_URL
 def app():
     engine = connect_to_db(DB_URL)
     session = sessionmaker(bind=engine)()
     # CRUD part
-    print("\n1. Add Data\n2. Read All Data\n3. Fetch particular row\n4. Update Particular Row\n5. Delete Particular Row\n6. Delete Table")
+    print("\n1. Add Data\n2. Fetch All Data\n3. Fetch particular row\n4. Update Particular Row\n5. Delete Particular Row\n6. Delete Table")
     option = int(input("Enter your choice:"))
     while option > 0 and option < 7:
         if option == 1:
@@ -22,7 +23,9 @@ def app():
             option = int(input("Enter your choice:"))
         elif option == 3:    
             # Query for a particular row
-            #session.commit()
+            returnedRows = query_row(session)
+            for row in returnedRows:
+                print(row)
             option = int(input("Enter your choice:"))
         elif option == 4:
             # First query for a particular row and then update it. Return the updated row
