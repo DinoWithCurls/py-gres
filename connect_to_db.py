@@ -10,8 +10,3 @@ def connect_to_db(DB_URL):
         Base.metadata.create_all(engine)
     print("Table Initialised!")
     return engine
-
-def delete_table(DB_URL):
-    engine = create_engine(DB_URL)
-    Base.metadata.drop_all(engine)
-    print("Table deleted")
