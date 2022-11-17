@@ -1,14 +1,19 @@
 from User import User
 
-
 def query_row(session):
     row = ''
-    print("The columns that can be currently queried are: name\tgender")
     colName = input("Enter the column name for filter:")
     param = input("Enter the query param:")
-    print("Only == operator is being used for filtering at the moment. Will add support for more operators and more columns.")
     if colName == 'name':
         row = session.query(User).filter(User.name == param).all()
     elif colName == 'gender':
         row = session.query(User).filter(User.gender == param).all()
+    elif colName == 'age':
+        row = session.query(User).filter(User.age == param).all()
+    elif colName == 'email':
+        row = session.query(User).filter(User.email == param).all()
+    elif colName == 'salary':
+        row = session.query(User).filter(User.salary  == param).all()
+    elif colName == 'phone_number':
+        row = session.query(User).filter(User.phone_number == param).all()
     return row
