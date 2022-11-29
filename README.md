@@ -36,12 +36,13 @@ pip install -r requirements.txt
 ```
 3. Create a file by the name env.py in the root, and add the following values:
 ```
-DB_NAME = "<name of your db>"
-DB_USER = "<your username for the db>"
-DB_PASS = "<password for db>"
-CONN_URL = "<your host IP, use localhost for default value>"
-CONN_PORT = "<your host port, use 5432 for default value>"
 DB_URL = DB_URL = "postgresql+psycopg2://" + DB_USER + ":" + DB_PASS + "@" + CONN_URL + CONN_PORT + "/" + DB_NAME
+PORT = <the port you want your app to run on>
 ```
-4. Run main.py
+4. Run the following command:
+
+```
+uvicorn main:fastapp --reload
+```
+
 
