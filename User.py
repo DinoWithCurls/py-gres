@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, DateTime
-
+from sqlalchemy.sql import func
 Base = declarative_base()
 # Create a class for the table definition
 class User(Base):
@@ -12,8 +12,4 @@ class User(Base):
     age = Column(Integer)
     gender = Column(String)
     salary = Column(Integer)
-    date_of_birth = Column(Date)
-    created_date = Column(DateTime)
-    def __repr__(self):
-        return "<User(name='{}', email='{}', phone_number={}, age={}, gender={}, salary={}, date_of_birth={}, created_date={})>"\
-                .format(self.name, self.email, self.phone_number, self.age, self.gender, self.salary, self.date_of_birth, self.created_date)
+    created_date = Column(DateTime(timezone=True), server_default=func.now())
