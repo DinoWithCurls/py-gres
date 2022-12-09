@@ -5,19 +5,18 @@ from fastapi_sqlalchemy import DBSessionMiddleware, db
 from schema import User as UserSchema
 from schema import User
 from User import User as UserModel
-from env import DB_URL, PORT
+from env import DB_URL
 
-fastapp = FastAPI()
+app = FastAPI()
 
-fastapp.add_middleware(DBSessionMiddleware, db_url=DB_URL)
+app.add_middleware(DBSessionMiddleware, db_url=DB_URL)
 
-
-@fastapp.get("/")
+@app.get("/")
 async def root():
     return {"message": "CRUD operations in PostgreSQL using Python FastAPI"}
 
 # Take data as user input and add it into table
-@fastapp.post('/users/', response_model=UserSchema)
+@app.post('/user/', response_model=UserSchema)
 async def adduser(user: UserSchema):
     db_user = UserModel(
         name=user.name,
@@ -32,19 +31,19 @@ async def adduser(user: UserSchema):
     return db_user
 
 # Get all users
-@fastapp.get('/users/', response_model=list[UserSchema])
+@app.get('/users/')
 async def allusers():
     users = db.session.query(UserModel).all()
     return users
 
 # Get one user
-@fastapp.get('/user/{user_id}', response_model=UserSchema)
+@app.get('/user/{user_id}', response_model=UserSchema)
 async def oneuser(user_id: int):
     user = db.session.query(UserModel).filter(UserModel.id == user_id).first()
     return user
 
 # Update one user
-@fastapp.put('/user/{user_id}', response_model=UserSchema)
+@app.put('/user/{user_id}', response_model=UserSchema)
 async def updateuser(user_id: int, updateVal: UserSchema):
     #user = db.session.query(UserModel).filter(UserModel.id == user_id).all()
     updated_row = db.session.query(UserModel).filter(UserModel.id == user_id).update({
@@ -60,12 +59,13 @@ async def updateuser(user_id: int, updateVal: UserSchema):
     return updatedUser
 
 # Delete one user
-@fastapp.delete('/user/{user_id}', response_model=list[UserSchema])
+@app.delete('/user/{user_id}', response_model=list[UserSchema])
 async def deleteuser(user_id: int):
     row_affected = db.session.query(UserModel).filter(UserModel.id == user_id).delete()
     db.session.commit()
     updated_user_list = db.session.query(UserModel).all()
     return updated_user_list
 
+
 if __name__ == '__main__':
-    uvicorn.run(fastapp, host='0.0.0.0', port= PORT)
+    uvicorn.run(app, host='0.0.0.0', port=8000)

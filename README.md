@@ -13,7 +13,6 @@ Table Name: users
 | age           | Number    |
 | gender        | Text      |
 | salary        | Number    |
-| date_of_birth | Timestamp |
 | created_date  | Timestamp |
 
 
@@ -30,19 +29,32 @@ Table Name: users
 ```
 virtualenv env && source env/bin/activate
 ```
-4. Run the following command (NOTE: psycopg2-binary will only work properly inside a virtual environment)
+4. Create a file called env.py in the root, and add the following line into it:
 ```
-pip install -r requirements.txt
+DB_URL = "postgresql+psycopg2://" + DB_USER + ":" + DB_PASS + "@db" + "/" + DB_NAME
 ```
-3. Create a file by the name env.py in the root, and add the following values:
+4. Install Docker in your system and start the app
+5. Run the following command
 ```
-DB_URL = DB_URL = "postgresql+psycopg2://" + DB_USER + ":" + DB_PASS + "@" + CONN_URL + CONN_PORT + "/" + DB_NAME
-PORT = <the port you want your app to run on>
+docker pull postgres
 ```
-4. Run the following command:
+6. Run the files runPostgres.sh and runServer.sh in different terminal tabs, after adding your own password in runPostgres.sh
+7. Run the following commands in another terminal:
+```
+docker-compose up --build
+docker network connect py-gres_default db
+docker network connect py-gres_default web
+```
+8. Access pgAdmin4 on the postgres url, and create the table with the schema provided above, else all endpoints other than "/" will throw "NO TABLE" error.
 
-```
-uvicorn main:fastapp --reload
-```
+9. Test the following endpoints on POSTMAN with their respective methods:
 
+| ENDPOINT        | METHOD | USE                           |
+|-----------------|--------|-------------------------------|
+| /               | GET    | Root                          |
+| /users          | GET    | Get all data present in table |
+| /user           | POST   | Enter data into the table     |
+| /user/{user_id} | GET    | Get a single row              |
+| /user/{user_id} | PUT    | Update a single row           |
+| /user/{user_id} | DELETE | Delete a single row           |
 
