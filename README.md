@@ -41,9 +41,9 @@ docker pull postgres
 6. Run the files runPostgres.sh and runServer.sh in different terminal tabs, after adding your own password in runPostgres.sh
 7. Run the following commands in another terminal:
 ```
-docker-compose up --build
-docker network connect py-gres_default db
-docker network connect py-gres_default web
+docker network create -d bridge <YOUR BRIDGE NAME>
+docker network connect <YOUR BRIDGE NAME> db
+docker network connect <YOUR BRIDGE NAME> web
 ```
 8. Access pgAdmin4 on the postgres url, and create the table with the schema provided above, else all endpoints other than "/" will throw "NO TABLE" error.
 
